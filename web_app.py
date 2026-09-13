@@ -22,10 +22,14 @@ st.sidebar.write("请选择要分析的上市企业：")
 
 # 制作一个下拉菜单，不仅有腾讯，还加上阿里和苹果！
 company_dict = {
-    "0700.HK": "腾讯控股",
+   "0700.HK": "腾讯控股",
     "BABA": "阿里巴巴 (美股)",
     "AAPL": "苹果公司 (美股)",
-    "TSLA": "特斯拉 (美股)"
+    "TSLA": "特斯拉 (美股)",
+    "MSFT": "微软 (Microsoft)",
+    "3690.HK": "美团 (港股)",
+    "600519.SS": "贵州茅台 (A股)",
+    "000858.SZ": "五粮液 (A股)",
 }
 selected_ticker = st.sidebar.selectbox("选择股票代码", list(company_dict.keys()))
 company_name = company_dict[selected_ticker]
