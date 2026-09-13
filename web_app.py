@@ -119,32 +119,31 @@ with st.spinner(f"正在穿上隐身衣，潜入雅虎财经抓取 {company_name
         # 【魔法】用 st.dataframe 把数据变成可以上下滑动、排序的精美网页表格
         st.dataframe(audit_df, use_container_width=True)
 
-        # ================= 4. 在网页上展示杜邦图表 =================
-        st.subheader("📉 杜邦分析可视化看板")
-
-        fig, axs = plt.subplots(2, 2, figsize=(14, 8))
-        # 图表绘制逻辑和之前完全一样
-        axs[0, 0].plot(years, roe, color='#D32F2F', marker='o', linewidth=3)
-        axs[0, 0].set_title("1. ROE (%)", fontsize=12)
-        axs[0, 0].set_xticks(years)
-
-        axs[0, 1].plot(years, net_margin, color='#1976D2', marker='s', linewidth=2)
-        axs[0, 1].set_title("2. 销售净利率 (%)", fontsize=12)
-        axs[0, 1].set_xticks(years)
-
-        axs[1, 0].plot(years, asset_turnover, color='#388E3C', marker='^', linewidth=2)
-        axs[1, 0].set_title("3. 总资产周转率 (次)", fontsize=12)
-        axs[1, 0].set_xticks(years)
-
-        axs[1, 1].plot(years, equity_multiplier, color='#F57C00', marker='d', linewidth=2)
-        axs[1, 1].set_title("4. 权益乘数 (倍)", fontsize=12)
-        axs[1, 1].set_xticks(years)
-
-        plt.tight_layout()
-
-        # 【魔法】用 st.pyplot 直接把画好的图表镶嵌进网页里！
-        st.pyplot(fig)
-
+     # ================= 4. 在网页上展示杜邦图表 (全新动态交互版) =================
+        st.subheader("📉 杜邦分析动态看板 (可滑动/点击)")
+        
+        # 将数据转换成 Streamlit 喜欢的格式 (带年份的纯数字列)
+        series_roe = pd.Series(roe.values, index=years)
+        series_margin = pd.Series(net_margin.values, index=years)
+        series_turnover = pd.Series(asset_turnover.values, index=years)
+        series_equity = pd.Series(equity_multiplier.values, index=years)
+        
+        # 使用 Streamlit 魔法，把网页直接切分成左右两列！
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("##### 1. 核心股东回报率 (ROE %)")
+            st.line_chart(series_roe)
+            
+            st.markdown("##### 3. 总资产周转率 (次)")
+            st.line_chart(series_turnover)
+            
+        with col2:
+            st.markdown("##### 2. 销售净利率 (%)")
+            st.line_chart(series_margin)
+            
+            st.markdown("##### 4. 权益乘数 (倍)")
+            st.line_chart(series_equity)
         st.success(f"🎉 {company_name} 数据分析加载完毕！你可以点击左侧栏切换其他公司。")
 
     except Exception as e:
